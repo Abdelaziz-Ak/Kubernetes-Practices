@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: init-dep-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: init-dep-app
+  template:
+    metadata:
+      labels:
+        app: init-dep-app
+    spec:
+      initContainers:
+      - name: download-data
+        image: busybox
+        command: ["sh", "-c", "echo 'Sample data' > /data/index.html"]
+        volumeMounts:
+        - name: data-dir
+          mountPath: /data
+      containers:
+      - name: nginx
+        image: nginx
+        volumeMounts:
+        - name: data-dir
+          mountPath: /usr/share/nginx/html
+      volumes:
+      - name: data-dir
+        emptyDir: {}

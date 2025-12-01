@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logging-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logging
+  template:
+    metadata:
+      labels:
+        app: logging
+    spec:
+      nodeSelector:
+        role: logging
+      tolerations:
+      - key: node-role
+        operator: Equal
+        value: logging
+        effect: NoSchedule
+      containers:
+      - name: logger
+        image: busybox
+        command: ["sh", "-c", "while true; do echo 'Logging...'; sleep 10; done"]

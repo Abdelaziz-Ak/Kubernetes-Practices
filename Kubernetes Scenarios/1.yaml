@@ -1,0 +1,15 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: report-generator
+spec:
+  schedule: "0 0 1 * *"  # Runs at 00:00 on 1st day of every month
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: report-generator
+            image: bash
+            command: ["sh", "-c", "echo \"Report generation done\""]
+          restartPolicy: Never
